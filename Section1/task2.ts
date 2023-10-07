@@ -1,7 +1,9 @@
+// Function to check if a number is within the 32-bit integer range
 function isWithin32BitIntegerRange(num: number): boolean {
   return num >= -2147483648 && num <= 2147483647;
 }
 
+// Function to evaluate a postfix expression
 function evaluatePostfixExpression(tokens: string[]): number {
   const stack: number[] = [];
 
@@ -43,7 +45,7 @@ function evaluatePostfixExpression(tokens: string[]): number {
       if (isWithin32BitIntegerRange(result)) {
         stack.push(result);
       } else {
-        throw new Error(`Result exceeds 32bit Integer range`);
+        throw new Error(`Result exceeds 32-bit Integer range`);
       }
     }
   }
@@ -56,6 +58,7 @@ function evaluatePostfixExpression(tokens: string[]): number {
   return stack[0];
 }
 
+// Function to validate tokens based on constraints
 function validateTokens(tokens: string[]) {
   // Check the length constraint (1 <= tokens.length <= 104)
   if (tokens.length < 1 || tokens.length > 104) {
@@ -65,22 +68,24 @@ function validateTokens(tokens: string[]) {
   // Check the range constraint for each numeric string
   for (const token of tokens) {
     if (!isNaN(Number(token))) {
-      if (Number(token) < -200 || Number(token) > 200)
+      if (Number(token) < -200 || Number(token) > 200) {
         throw new Error(`Number out of range`);
+      }
     }
   }
 }
 
+// Main function to calculate the Reverse Polish Notation expression
 const calculateRpnExpression = async () => {
   console.log("=====CALCULATE REVERSE POLISH NOTATION=====");
   try {
-    const tokens = ["4", "2", "+", "5", "*", "400", "/"];
-    console.log(`Input array : ${tokens}`);
+    const tokens = ["4", "2", "+", "5", "*", "4", "/"];
+    console.log(`Input array: ${tokens}`);
 
     await validateTokens(tokens);
 
     const result = await evaluatePostfixExpression(tokens);
-    console.log(`\nResult : ${result}`);
+    console.log(`\nResult: ${result}`);
   } catch (error: any) {
     console.log("\n");
     console.log(error.toString());
