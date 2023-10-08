@@ -10,6 +10,6 @@
         "skipLibCheck": true,
       },
       "include": [
-        "./task1.ts"
+        "./*"
       ]
 }
