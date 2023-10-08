@@ -1,37 +1,40 @@
-import express, { Request, Response } from "express";
-const app = express();
-import User, { IUser } from "./../models/Users";
+import express, {  Response } from "express";
 import Investor, { IInvestor } from "./../models/Investor";
 import { authenticateToken } from "./../middleware/auth"; // Import the authentication middleware
 
-// Login route
+const app = express();
+
+// Route to verify KYC for a branch (requires authentication)
 app.post(
   "/branch/verify-kyc",
   authenticateToken,
   async (req: any, res: Response) => {
-    if (req.user.type !== "branch") {
-      res.status(401).json({ message: "Un authorised" });
-    }
-    const { investorId} = req.body;
+    try {
+      // Check if the authenticated user is of type "branch"
+      if (req.user.type !== "branch") {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
 
-    // Find the user by userId (you should replace this with your database query)
-    const investor: IInvestor | null = await Investor.findOne({
-      userId: investorId,
-    });
-    if (!investor) {
-      res.status(400).json({ message: "Invalid investor id" });
-    }
+      const { investorId } = req.body;
 
-    await Investor.findOneAndUpdate(
-      {
+      // Find the investor by userId in the database
+      const investor: IInvestor | null = await Investor.findOne({
         userId: investorId,
-      },
-      { kyc: true }
-    );
+      });
 
-    res.json({ message: "done" });
+      if (!investor) {
+        return res.status(400).json({ message: "Invalid investor id" });
+      }
+
+      // Update the KYC status for the investor
+      await Investor.findOneAndUpdate({ userId: investorId }, { kyc: true });
+
+      return res.json({ message: "KYC verification done" });
+    } catch (error) {
+      console.error("Error verifying KYC:", error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
   }
 );
 
-
-export default app
+export default app;

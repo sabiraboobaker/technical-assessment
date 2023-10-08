@@ -1,6 +1,6 @@
+import mongoose, { Schema, Document } from "mongoose";
 
-import mongoose, { Schema, Document } from 'mongoose';
-
+// Define the Investor interface representing the schema
 export interface IInvestor extends Document {
   name: string;
   email: string;
@@ -12,6 +12,7 @@ export interface IInvestor extends Document {
   tradeBalance?: number;
 }
 
+// Create the Mongoose schema for the Investor
 const investorSchema: Schema<IInvestor> = new Schema<IInvestor>({
   name: {
     type: String,
@@ -43,10 +44,11 @@ const investorSchema: Schema<IInvestor> = new Schema<IInvestor>({
   },
   tradeBalance: {
     type: Number,
-    default:0
+    default: 0,
   },
 });
 
-const Investor = mongoose.model<IInvestor>('Investor', investorSchema);
+// Create the Investor model from the schema
+const Investor = mongoose.model<IInvestor>("Investor", investorSchema);
 
 export default Investor;

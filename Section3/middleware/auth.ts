@@ -1,4 +1,3 @@
-// auth.ts
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
@@ -8,14 +7,18 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
+  // Get the JWT token from the "Authorization" header
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
+  // If no token is provided, return an unauthorized response
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  // Verify the JWT token with the secret key
   jwt.verify(token, "secret-key", (err: any, user: any) => {
+    // If verification fails, return a forbidden response
     if (err) {
       return res.status(403).json({ message: "Forbidden" });
     }

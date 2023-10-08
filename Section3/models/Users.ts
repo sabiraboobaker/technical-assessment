@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import bcrypt from 'bcrypt'; 
 
-// Define the User schema
+// Define the User interface representing the schema
 export interface IUser extends Document {
   userId: string;
   name: string;
@@ -9,23 +9,24 @@ export interface IUser extends Document {
   password: string;
 }
 
+// Create the Mongoose schema for the User
 const userSchema: Schema<IUser> = new Schema<IUser>({
   userId: {
     type: String,
     required: true,
-    unique: true,
+    unique: true, 
   },
   name: {
     type: String,
-    required: true,
+    required: true, 
   },
   type: {
     type: String,
-    required: true,
+    required: true, 
   },
   password: {
     type: String,
-    required: true,
+    required: true, 
   },
 });
 
@@ -44,7 +45,7 @@ userSchema.pre<IUser>('save', async function (next) {
   }
 });
 
-// Create the User model
+// Create the User model from the schema
 const User = mongoose.model<IUser>('User', userSchema);
 
 export default User;
